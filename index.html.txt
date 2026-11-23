@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = "https://akgllzmlmgsnssaupubm.supabase.co";
+const SUPABASE_KEY = "sb_publishable_xTmdIAeYf3zdI1jLLOJNlw_MZvA-nFt";
+
+var supabaseClient = supabase.createClient(
+
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+</script>
+
+  <title>LION PARCEL LOGISTICS</title>
+
+<style>
+#trackingResult {
+  background: #171717;
+  color: white;
+  border: 2px solid #D6A83B;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  white-space: pre-line;
+  font-size: 16px;
+box-shadow: 0 4px 15px rgba(214, 168, 59, 0.15);
+}
+.completed {
+  color: #16a34a;
+  font-weight: bold;
+}
+
+.pending {
+  color: #888888;
+}
+
+#trackingTimeline {
+  margin-top: 25px;
+  padding: 15px;
+  border: 2px solid #D6A83B;
+  border-radius: 12px;
+} 
+#receipt {
+  background: #171717;
+  color: white;
+  border: 2px solid #D6A83B;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+} 
+#receipt h2 {
+  color: #D6A83B;
+  text-align: center;
+}
+
+#trackingLogo + h2 {
+  color: #D6A83B;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+#receipt p {
+  line-height: 1.8;
+} 
+#receipt hr {
+  border: 0;
+  border-top: 1px solid #D6A83B;
+  margin: 15px 0;
+} 
+.receipt-title {
+  color: #D6A83B;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 2px;
+  font-size: 14px;
+} 
+#companyLogo {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+#companyLogo img {
+  width: 120px;
+  height: auto;
+  border-radius: 10px;
+} 
+#trackingLogo {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+#trackingLogo img {
+  width: 120px;
+  height: auto;
+  border-radius: 10px;
+} 
+.mainLogo {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.mainLogo img {
+  width: 200px;
+  height: auto;
+  border-radius: 12px;
+} 
+.trackButton {
+  background: #D6A83B;
+  color: #171717;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.trackButton:hover {
+  background: #F0C75E;
+} 
+.trackInput {
+  width: 90%;
+  max-width: 350px;
+  padding: 12px;
+  border: 2px solid #D6A83B;
+  border-radius: 8px;
+  background: #171717;
+  color: white;
+  font-size: 16px;
+  outline: none;
+}
+
+.trackInput:focus {
+  box-shadow: 0 0 8px rgba(214, 168, 59, 0.5);
+} 
+.status-registered {
+  color: #3B82F6;
+}
+
+.status-collected {
+  color: #A855F7;
+}
+
+.status-transit {
+  color: #D6A83B;
+}
+
+.status-out {
+  color: #F97316;
+}
+
+.status-delivered {
+  color: #22C55E;
+} 
+
+#senderName,
+#receiverName,
+#parcelDescription,
+#collectionLocation,
+#destination {
+  width: 90%;
+  max-width: 350px;
+  padding: 12px;
+  margin-top: 8px;
+  border: 2px solid #D6A83B;
+  border-radius: 8px;
+  background: #171717;
+  color: white;
+  font-size: 16px;
+  outline: none;
+}
+
+#senderName:focus,
+#receiverName:focus,
+#parcelDescription:focus,
+#collectionLocation:focus,
+#destination:focus {
+  box-shadow: 0 0 8px rgba(214, 168, 59, 0.5);
+}
+label {
+  display: block;
+  color: #D6A83B;
+  font-weight: bold;
+  margin-top: 15px;
+  margin-bottom: 5px;
+} 
+.registerButton {
+  background: #D6A83B;
+  color: #171717;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: 0.3s;
+  width: 100%;
+}
+
+.registerButton:hover {
+  background: #F0C75E;
+  box-shadow: 0 4px 15px rgba(214, 168, 59, 0.3);
+} 
+
+#registrationForm {
+  background: #171717;
+  border: 2px solid #D6A83B;
+  border-radius: 15px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 4px 15px rgba(214, 168, 59, 0.15);
+}
+
+#registrationForm h2 {
+  color: #D6A83B;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+#registrationForm p {
+  color: white;
+  text-align: center;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+#registrationForm:hover {
+  box-shadow: 0 0 20px rgba(214, 168, 59, 0.3);
+  transition: 0.3s;
+}
+
+#registrationForm input {
+  display: block;
+  margin-bottom: 15px;
+}
+
+#registrationMessage {
+  color: #22C55E;
+  background: #10251A;
+  border: 1px solid #22C55E;
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 15px;
+  text-align: center;
+  font-weight: bold;
+}
+
+@media print {
+
+  @page {
+    margin: 15mm;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  #receipt,
+  #receipt *,
+  #verificationPage,
+  #verificationPage * {
+    visibility: visible;
+  }
+
+  #receipt {
+    page-break-inside: avoid;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 90%;
+    margin: 0;
+    background: white;
+    color: #171717;
+    border: 2px solid #D6A83B;
+    padding: 25px;
+    box-shadow: none;
+  }
+  #receipt p {
+  color: #171717 !important;
+}
+
+#receipt span {
+  color: #171717 !important;
+}
+  body.printVerification #receipt,
+  body.printVerification #receipt * {
+    visibility: hidden;
+  }
+
+  body.printVerification #verificationPage {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 90%;
+    background: white;
+    color: #171717;
+    padding: 25px;
+    border: 2px solid #D6A83B;
+  }
+
+  body.printVerification #verificationPage * {
+    visibility: visible;
+  }
+
+}
+
+#receipt h2 {
+  color: #D6A83B;
+  text-align: center;
+  font-size: 24px;
+  letter-spacing: 2px;
+}
+
+}
+
+#receipt .receipt-title {
+  color: #9A7418;
+  font-weight: bold;
+  text-align: center;
+}
+
+#receipt p {
+  color: white;
+  font-size: 15px;
+  line-height: 2;
+  margin: 8px 0;
+}
+
+}
+
+#receipt::after {
+  content: "LION PARCEL LOGISTICS | Powered by DE ØFFICIAL";
+  display: block;
+  text-align: center;
+  color: #9A7418;
+  font-size: 11px;
+  font-weight: bold;
+  border-top: 1px solid #D6A83B;
+  padding-top: 15px;
+  margin-top: 25px;
+}
+
+#receiptQR {
+  text-align: center;
+  margin-top: 20px;
+  padding: 15px;
+  background: white;
+  border: 1px solid #D6A83B;
+  border-radius: 10px;
+}
+
+#receiptQR img {
+  display: inline-block;
+  margin: auto;
+}
+
+.qrLabel {
+  color: #9A7418;
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin-top: 12px;
+}
+
+#verificationPage {
+  background: #171717;
+  color: white;
+  border: 2px solid #D6A83B;
+  border-radius: 15px;
+  padding: 20px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+#verificationPage h2 {
+  color: #D6A83B;
+  letter-spacing: 1px;
+}
+
+#verificationResult {
+  background: #222222;
+  color: white;
+  border: 1px solid #D6A83B;
+  border-radius: 10px;
+  padding: 18px;
+  margin-top: 20px;
+  font-weight: bold;
+  line-height: 2;
+  text-align: center;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="mainLogo">
+  <img src="https://i.ibb.co/xK6zD5wK/66-D4-AB07-FDBA-45-B6-82-CB-4-D6-FE257-D559.png" alt="Lion Parcel Logistics Logo">
+</div>
+
+  <h1>LION PARCEL LOGISTICS</h1>
+  <p>Consignment QR Code Generator</p>
+
+<h3>Generate Consignment QR Code</h3>
+
+<label>Consignment Reference:</label>
+
+<input
+  type="text"
+  id="reference"
+  placeholder="LPL-2026-000001"
+>
+
+<button onclick="generateReference()">Generate Reference Number</button>
+
+<button onclick="generateQR()">Generate QR Code</button>
+
+<div id="qrcode"></div> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+function generateQR() {
+
+  var reference = document.getElementById("reference").value;
+
+  if (reference === "") {
+    alert("Please enter a reference number");
+    return;
+  }
+
+  var box = document.getElementById("qrcode");
+  box.innerHTML = "";
+
+  new QRCode(box, {
+  text: "https://www.google.com/search?q=" + encodeURIComponent(reference),
+    width: 180,
+    height: 180
+  });
+
+}
+
+var nextReferenceNumber = Number(localStorage.getItem("lplNextReference") || "1");
+
+var consignments = JSON.parse(
+  localStorage.getItem("lplConsignments") || "[]"
+);
+
+function generateReference() {
+  var reference = "LPL-2026-" + String(nextReferenceNumber).padStart(6, "0");
+
+  document.getElementById("reference").value = reference;
+
+  saveConsignment(reference);
+
+  nextReferenceNumber++;
+
+  localStorage.setItem("lplNextReference", nextReferenceNumber);
+}
+
+async function staffLogin() {
+
+  var email = document.getElementById("staffEmail").value.trim();
+  var password = document.getElementById("staffPassword").value;
+
+  var message = document.getElementById("staffLoginMessage");
+
+  message.textContent = "Checking login details...";
+
+  try {
+
+    var { data, error } = await supabaseClient.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
+
+    if (error) {
+      message.textContent = "Login failed. Check your email and password.";
+      return;
+    }
+
+    var { data: staff, error: staffError } =
+      await supabaseClient.rpc("is_authorised_staff");
+
+    if (staffError || staff !== true) {
+
+      await supabaseClient.auth.signOut();
+
+      message.textContent = "You are not authorised as staff.";
+      return;
+    }
+
+    document.getElementById("staffLogin").style.display = "none";
+
+document.getElementById("registrationPanel").style.display = "block";
+    document.getElementById("staffPanel").style.display = "block";
+
+    message.textContent = "";
+
+ } catch (error) {
+
+  alert("Login error: " + error.message);
+
+  message.textContent = "Connection error. Please try again.";
+
+}
+
+}
+
+async function registerConsignment() {
+
+document.getElementById("registrationMessage").textContent = "";
+
+  var reference = document.getElementById("reference").value.trim(); 
+
+document.getElementById("receiptReference").textContent = reference;
+
+  var sender = document.getElementById("senderName").value.trim();
+  var receiver = document.getElementById("receiverName").value.trim();
+  var parcel = document.getElementById("parcelDescription").value.trim();
+  var collection = document.getElementById("collectionLocation").value.trim();
+  var destination = document.getElementById("destination").value.trim();
+
+  if (!reference || !sender || !receiver || !parcel || !collection || !destination) {
+    alert("Please complete all fields and generate a reference number.");
+    return;
+  }
+
+ var dateIssued = new Date().toISOString().slice(0, 10);
+
+var { data: newRecord, error } = await supabaseClient
+  .from("Consignment")
+  .insert({
+    reference: reference,
+    status: "Consignment Registered",
+    "date issued": dateIssued,
+    sender_name: sender,
+    receiver_name: receiver,
+    parcel_description: parcel,
+    collection_location: collection,
+    destination: destination
+  })
+  .select("reference, verification_token")
+  .single();
+
+if (error) {
+  alert("Registration failed: " + error.message);
+  return;
+}
+
+var verificationToken = newRecord.verification_token;
+
+console.log("Verification Token:", verificationToken);
+ document.getElementById("receiptSender").textContent = sender;
+
+document.getElementById("receiptDate").textContent = dateIssued;
+
+document.getElementById("receiptReceiver").textContent = receiver;
+
+document.getElementById("receiptParcel").textContent = parcel;
+
+document.getElementById("receiptCollection").textContent = collection;
+
+document.getElementById("receiptDestination").textContent = destination;
+
+document.getElementById("receiptQR").innerHTML = "";
+
+new QRCode(document.getElementById("receiptQR"), {
+  text: reference,
+  width: 150,
+  height: 150,
+  colorDark: "#171717",
+  colorLight: "#ffffff",
+  correctLevel: QRCode.CorrectLevel.H
+});
+
+ document.getElementById("registrationMessage").textContent =
+  "✓ Consignment registered successfully!";
+
+}
+
+function saveConsignment(reference) {
+
+  consignments.push({
+    reference: reference,
+    status: 1
+  });
+
+  localStorage.setItem(
+    "lplConsignments",
+    JSON.stringify(consignments)
+  );
+
+}
+
+</script>
+
+<hr>
+
+<div id="trackingLogo">
+  <img src="https://i.ibb.co/xK6zD5wK/66-D4-AB07-FDBA-45-B6-82-CB-4-D6-FE257-D559.png" alt="Lion Parcel Logistics Logo">
+</div>
+
+<h2>Track Your Consignment</h2>
+
+<p>Enter your consignment number below:</p>
+
+<input type="text" id="trackingNumber" class="trackInput" placeholder="Enter LPL reference number">
+
+<button class="trackButton" onclick="trackParcel()">Track Shipment</button>
+
+<div id="trackingResult"></div>
+
+<div id="trackingTimeline">
+
+  <h3>Shipment Journey</h3>
+
+  <p id="stage1" class="pending">
+    1. Consignment Registered
+  </p>
+
+  <p id="stage2" class="pending">
+    2. Parcel Collected
+  </p>
+
+  <p id="stage3" class="pending">
+    3. In Transit
+  </p>
+
+  <p id="stage4" class="pending">
+    4. Out for Delivery
+  </p>
+
+  <p id="stage5" class="pending">
+    5. Delivered
+  </p>
+
+</div>
+
+<hr>
+
+<hr>
+
+<div id="registrationPanel" style="display:none;">
+
+<h2>New Consignment Registration</h2>
+
+<div id="registrationForm">
+
+  <p>Enter the sender and receiver details below:</p>
+
+<label>Sender's Name:</label>
+
+<input
+  type="text"
+  id="senderName"
+  placeholder="Enter sender's full name">
+
+<label>Receiver's Name:</label>
+
+<input
+  type="text"
+  id="receiverName"
+  placeholder="Enter receiver's full name">
+
+<br><br>
+
+<label>Parcel Description:</label>
+
+<input
+  type="text"
+  id="parcelDescription"
+  placeholder="Describe the parcel">
+
+<br><br>
+
+<label>Collection Location:</label>
+
+<input
+  type="text"
+  id="collectionLocation"
+  placeholder="Enter collection location">
+
+<br><br>
+
+<label>Destination:</label>
+
+<input
+  type="text"
+  id="destination"
+  placeholder="Enter destination">
+
+<br><br>
+
+<button class="registerButton" onclick="registerConsignment()">
+  Register Consignment
+</button>
+
+<div id="registrationMessage"></div>
+
+</div>
+
+</div>
+
+<div id="verificationPage">
+
+  <h2>Consignment Verification</h2>
+
+  <p>Verify your consignment reference number:</p>
+
+<input
+  type="text"
+  id="verifyReference"
+  placeholder="Enter consignment reference"
+>
+
+<button onclick="verifyConsignment()">
+  Verify Consignment
+</button>
+
+  <p id="verificationResult"></p>
+
+<button onclick="copyVerificationID()">
+  Copy Verification ID
+</button>
+
+<button onclick="downloadVerificationPDF()">
+  Download Verification Record
+</button>
+
+</div>
+
+<div id="staffLogin">
+
+  <h2>Staff Login</h2>
+
+  <input
+    type="email"
+    id="staffEmail"
+    placeholder="Staff Email"
+  >
+
+  <input
+    type="password"
+    id="staffPassword"
+    placeholder="Password"
+  >
+
+  <button onclick="staffLogin()">
+    Login
+  </button>
+
+  <p id="staffLoginMessage"></p>
+
+</div>
+
+<div id="staffPanel" style="display:none;">
+
+<hr>
+<h2>Staff Control Panel</h2>
+
+<label>Update Shipment Status:</label>
+
+<select id="staffStatus">
+
+  <option value="Consignment Registered">Consignment Registered</option>
+
+  <option value="Parcel Collected">Parcel Collected</option>
+
+  <option value="In Transit">In Transit</option>
+
+  <option value="Out for Delivery">Out for Delivery</option>
+
+  <option value="Delivered">Delivered</option>
+
+</select>
+
+<button onclick="updateShipment()">
+  Update Shipment
+</button>
+
+<hr>
+
+</div>
+
+<h2>Consignment Receipt</h2>
+
+<div id="receipt">
+
+<div id="companyLogo">
+  <img src="https://i.ibb.co/xK6zD5wK/66-D4-AB07-FDBA-45-B6-82-CB-4-D6-FE257-D559.png" alt="Lion Parcel Logistics Logo">
+</div>
+
+  <h2>LION PARCEL LOGISTICS</h2>
+
+ <p class="receipt-title">OFFICIAL CONSIGNMENT RECEIPT</p>
+
+  <hr>
+
+   <p>Reference: <span id="receiptReference">LPL-2026-000001</span></p>
+
+   <p>Sender: <span id="receiptSender">Sample Sender</span></p>
+
+  <p>Receiver: <span id="receiptReceiver">Sample Receiver</span></p>
+
+  <p>Parcel: <span id="receiptParcel">General Merchandise</span></p>
+
+  <p>Collection: <span id="receiptCollection">Lagos</span></p>
+
+  <p>Destination: <span id="receiptDestination">Abuja</span></p>
+
+  <p>Date Issued: <span id="receiptDate">21 November 2026</span></p>
+
+<div id="receiptQR"></div>
+
+<p class="qrLabel">SCAN TO VERIFY CONSIGNMENT</p>
+
+</div>
+
+<button
+ onclick="window.print()">
+  Print Consignment Receipt
+</button>
+
+<script>
+function trackParcel() {
+
+  var number = document.getElementById("trackingNumber").value.trim();
+
+  var result = document.getElementById("trackingResult");
+
+  var progress = 0;
+
+  if (number === "") {
+    result.textContent = "Please enter a consignment number.";
+  } 
+ else if (consignments.some(function(item) {
+  return item.reference === number;
+})) {
+
+  var record = consignments.find(function(item) {
+  return item.reference === number;
+});
+
+progress = record.status;
+
+    result.textContent =
+    "Consignment: " + number + "\n" +
+      "Document status: Sample record\n" +
+      "Shipment status: " +
+["Consignment Registered", "Parcel Collected", "In Transit", "Out for Delivery", "Delivered"][progress - 1] +
+" (DEMO ONLY)";
+
+  } 
+  else {
+
+    result.textContent =
+      "No sample record found for: " + number;
+
+  }
+
+  for (var i = 1; i <= 5; i++) {
+
+    var stage = document.getElementById("stage" + i);
+
+    if (i <= progress) {
+      stage.className = "completed";
+      stage.textContent = "✓ " + stage.textContent.replace(/^[✓0-9. ]+/, "");
+    } 
+    else {
+      stage.className = "pending";
+      stage.textContent = i + ". " + stage.textContent.replace(/^[✓0-9. ]+/, "");
+    }
+
+  }
+
+}
+
+var shipmentProgress = 3;
+
+async function updateShipment() {
+
+var status = document.getElementById("staffStatus").value;
+
+var progress = [
+  "Consignment Registered",
+  "Parcel Collected",
+  "In Transit",
+  "Out for Delivery",
+  "Delivered"
+].indexOf(status) + 1;
+
+  shipmentProgress = progress;
+
+var number = document.getElementById("trackingNumber").value.trim();
+
+if (!number) {
+  alert("Please enter a consignment number.");
+  return;
+}
+
+var { data: updatedRecord, error } = await supabaseClient
+  .from("Consignment")
+  .update({ status: status })
+  .eq("reference", number)
+  .select("reference")
+  .maybeSingle();
+
+if (error) {
+  alert("Shipment update failed: " + error.message);
+  return;
+}
+
+if (!updatedRecord) {
+  alert("No consignment found with that reference number.");
+  return;
+}
+
+  var names = [
+    "Consignment Registered",
+    "Parcel Collected",
+    "In Transit",
+    "Out for Delivery",
+    "Delivered"
+  ];
+
+  for (var i = 1; i <= 5; i++) {
+
+    var stage = document.getElementById("stage" + i);
+
+    if (i <= progress) {
+      stage.className = "completed";
+      stage.textContent = "✓ " + names[i - 1];
+    } else {
+      stage.className = "pending";
+      stage.textContent = (i) + ". " + names[i - 1];
+    }
+
+  }
+
+ var statusClass = ["status-registered", "status-collected", "status-transit", "status-out", "status-delivered"][progress - 1]; document.getElementById("trackingResult").innerHTML =
+ "Consignment: " + number + "<br>" +
+ "Document status: Consignment Record<br>" +
+ "Shipment status: <strong class='" + statusClass + "'>" +
+  names[progress - 1].toUpperCase() +
+  "</strong><br>" +
+  "";
+
+alert("Shipment status updated successfully!");
+
+}
+
+function verifyConsignment() {
+
+  var reference = document.getElementById("verifyReference").value.trim();
+
+  var result = document.getElementById("verificationResult");
+
+  var record = consignments.find(function(item) {
+    return item.reference === reference;
+  });
+
+  var names = [
+    "Consignment Registered",
+    "Parcel Collected",
+    "In Transit",
+    "Out for Delivery",
+    "Delivered"
+  ];
+
+  if (reference === "") {
+    result.textContent = "Please enter a consignment reference number.";
+  }
+
+  else if (!record) {
+    result.textContent = "Consignment not found. Please check your reference number.";
+  }
+
+  else {
+    var progress = record.status || 1;
+
+var verificationId = "LPL-VERIFY-" + record.reference;
+
+   result.innerHTML =
+  "✓ CONSIGNMENT VERIFIED SUCCESSFULLY!<br><br>" +
+  "Reference: " + record.reference + "<br>" +
+
+"Verification ID: <span id='verificationCode'>" + verificationId + "</span><br>" +
+
+  "Shipment Status: <strong>" +
+  names[progress - 1] +
+  "</strong><br>" +
+  "Date Issued: " + (record.dateIssued || "Not available") + "<br>" +
+ "Parcel Description: " + (record.parcel || "Not available") + "<br>" +
+"Collection Location: " + (record.collection || "Not available") + "<br>" +
+"Destination: " + (record.destination || "Not available");
+  }
+
+}
+
+function copyVerificationID() {
+
+  var code = document.getElementById("verificationCode");
+
+  if (!code) {
+    alert("Please verify a consignment first.");
+    return;
+  }
+
+  navigator.clipboard.writeText(code.textContent)
+    .then(function() {
+      alert("Verification ID copied successfully!");
+    })
+    .catch(function() {
+      alert("Unable to copy. Please try again.");
+    });
+
+}
+
+function downloadVerificationPDF() {
+
+  var result = document.getElementById("verificationResult");
+
+  if (!result.textContent.trim()) {
+    alert("Please verify a consignment first.");
+    return;
+  }
+
+  document.body.classList.add("printVerification");
+
+  window.print();
+
+}
+
+window.addEventListener("afterprint", function() {
+  document.body.classList.remove("printVerification");
+});
+
+</script>
+
+<div id="publicVerificationPage" style="display:none;">
+
+  <div class="mainLogo">
+    <img src="https://i.ibb.co/xK6zD5wK/66-D4-AB07-FDBA-45-B6-82-CB-4-D6-FE257-D559.png" alt="Lion Parcel Logistics Logo">
+  </div>
+
+  <h2>LION PARCEL LOGISTICS</h2>
+
+  <h3>CONSIGNMENT VERIFICATION</h3>
+
+  <p id="publicVerificationStatus">
+    Checking consignment record...
+  </p>
+
+  <p>Reference: <span id="publicReference"></span></p>
+
+  <p>Shipment Status: <span id="publicShipmentStatus"></span></p>
+
+  <p>Date Issued: <span id="publicDateIssued"></span></p>
+
+  <p id="publicVerificationMessage"></p>
+
+</div>
+
+<script>
+
+function checkPublicVerification() {
+
+  var reference = window.location.hash.replace("#verify=", "");
+
+  if (!reference) {
+    return;
+  }
+
+  reference = decodeURIComponent(reference);
+
+  document.getElementById("publicVerificationPage").style.display = "block";
+
+  var record = consignments.find(function(item) {
+    return item.reference === reference;
+  });
+
+  if (!record) {
+    document.getElementById("publicVerificationStatus").textContent =
+      "CONSIGNMENT NOT FOUND";
+
+    document.getElementById("publicVerificationMessage").textContent =
+      "Please check the reference number.";
+
+    return;
+  }
+
+  var names = [
+    "Consignment Registered",
+    "Parcel Collected",
+    "In Transit",
+    "Out for Delivery",
+    "Delivered"
+  ];
+
+  document.getElementById("publicVerificationStatus").textContent =
+    "CONSIGNMENT VERIFIED SUCCESSFULLY";
+
+  document.getElementById("publicReference").textContent = record.reference;
+
+  document.getElementById("publicShipmentStatus").textContent =
+    names[(record.status || 1) - 1];
+
+  document.getElementById("publicDateIssued").textContent =
+    record.dateIssued || "Not available";
+
+}
+
+checkPublicVerification();
+
+
+</script>
+
+</body>
+</html>

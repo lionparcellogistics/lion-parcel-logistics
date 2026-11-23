@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>LION PARCEL LOGISTICS - Verification</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+var VERIFY_SUPABASE_URL = "400855b5-ccef-4ada-b318-1c37069bc24d";
+var VERIFY_SUPABASE_KEY = "sb_publishable_xTmdIAeYf3zdI1jLLOJNlw_MZvA-nFt";
+
+var verifyClient = supabase.createClient(
+  VERIFY_SUPABASE_URL,
+  VERIFY_SUPABASE_KEY
+);
+</script>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f3f4f6;
+  color: #171717;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #12345a;
+}
+
+h2 {
+  text-align: center;
+  color: #12345a;
+}
+
+#verificationResult {
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 25px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+#verificationMessage {
+  text-align: center;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+</style>
+
+</head>
+
+<body>
+
+  <h1>LION PARCEL LOGISTICS</h1>
+
+  <h2>Consignment Verification</h2>
+
+<div id="verificationResult">
+  <div id="verificationMessage">
+    Connecting to LION PARCEL LOGISTICS...
+  </div>
+</div>
+
+<script>
+async function verifyConsignment() {
+
+  var message = document.getElementById("verificationMessage");
+
+  var token = new URLSearchParams(window.location.search).get("token");
+
+  if (!token) {
+    message.textContent = "No verification token was provided. Please scan the QR code again.";
+    return;
+  }
+
+  message.textContent = "Searching for consignment...";
+
+  var { data, error } = await verifyClient.rpc(
+    "verify_consignment",
+    {
+      p_token: token
+    }
+  );
+
+  if (error) {
+    message.textContent = "Unable to verify this consignment. Please try again.";
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    message.textContent = "Consignment not found. Please contact LION PARCEL LOGISTICS.";
+    return;
+  }
+
+  var record = data[0];
+
+ message.innerHTML = "";
+
+function addDetail(label, value) {
+  var p = document.createElement("p");
+  var strong = document.createElement("strong");
+
+  strong.textContent = label + ": ";
+  p.appendChild(strong);
+
+  p.appendChild(
+    document.createTextNode(value || "Not provided")
+  );
+
+  message.appendChild(p);
+}
+
+var heading = document.createElement("h2");
+heading.textContent = "Consignment Verified";
+message.appendChild(heading);
+
+addDetail("Reference", record.reference);
+addDetail("Status", record.status);
+addDetail("Date Issued", record.date_issued);
+addDetail("Sender", record.sender_name);
+addDetail("Receiver", record.receiver_name);
+addDetail("Parcel", record.parcel_description);
+addDetail("Collection Location", record.collection_location);
+addDetail("Destination", record.destination);
+}
+
+verifyConsignment();
+</script>
+
+</body>
+</html>
