@@ -571,7 +571,7 @@ document.getElementById("receiptDestination").textContent = destination;
 document.getElementById("receiptQR").innerHTML = "";
 
 new QRCode(document.getElementById("receiptQR"), {
-  text: reference,
+  text: "https://lion-parcel-logistics-sqb6.netlify.app/verify.html?token=" + encodeURIComponent(verificationToken),
   width: 150,
   height: 150,
   colorDark: "#171717",
