@@ -512,6 +512,18 @@ document.getElementById("registrationPanel").style.display = "block";
 
 }
 
+async function staffLogout() {
+
+  await supabaseClient.auth.signOut();
+
+  document.getElementById("staffLogin").style.display = "block";
+  document.getElementById("registrationPanel").style.display = "none";
+  document.getElementById("staffPanel").style.display = "none";
+
+  document.getElementById("staffLoginMessage").textContent =
+    "You have successfully logged out.";
+}
+  
 async function registerConsignment() {
 
 document.getElementById("registrationMessage").textContent = "";
@@ -763,6 +775,10 @@ function saveConsignment(reference) {
 
 <hr>
 <h2>Staff Control Panel</h2>
+  
+  <button onclick="staffLogout()">
+  Logout
+</button>
 
 <label>Update Shipment Status:</label>
 
