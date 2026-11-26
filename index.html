@@ -525,6 +525,14 @@ async function staffLogout() {
 }
   
 async function registerConsignment() {
+  
+    var { data: authorised, error: authError } =
+    await supabaseClient.rpc("is_authorised_staff");
+
+  if (authError || authorised !== true) {
+    alert("Access denied. Please log in as authorised staff.");
+    return;
+  }
 
 document.getElementById("registrationMessage").textContent = "";
 
